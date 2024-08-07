@@ -25,7 +25,7 @@ public class DAORol extends ABMDAO<Rol> {
 	}
 
     public List<Rol> getRolesUsuario(int id){
-        String query = "SELECT Rol.* FROM Rol JOIN Usuario_Rol ON Rol.id = Usuario_Rol.rol_id WHERE Usuario_Rol.usuario_id=:id";
+        String query = "SELECT Rol.* FROM Rol JOIN UsuarioRol ON Rol.id = UsuarioRol.rol_id WHERE UsuarioRol.usuario_id=:id";
         try(Connection con = DAOSql2o.getSql2o().open()){
             return con.createQuery(query).addParameter("id",id).executeAndFetch(Rol.class);
         }

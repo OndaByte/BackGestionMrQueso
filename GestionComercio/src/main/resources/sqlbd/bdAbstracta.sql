@@ -1,10 +1,10 @@
-DROP TABLE IF EXISTS Rol_Permiso ;
-DROP TABLE IF EXISTS Usuario_Rol;
+DROP TABLE IF EXISTS RolPermiso ;
+DROP TABLE IF EXISTS UsuarioRol;
 DROP TABLE IF EXISTS Permiso;
 DROP TABLE IF EXISTS Rol;
 DROP TABLE IF EXISTS Usuario;
+DROP TABLE IF EXISTS Caja;
 DROP TABLE IF EXISTS ObjetoBD;
-DROP TABLE IF EXISTS Test;
 
 CREATE TABLE ObjetoBD(
     id INT AUTO_INCREMENT,
@@ -22,6 +22,14 @@ CREATE TABLE Usuario(
     FOREIGN KEY(id) REFERENCES ObjetoBD(id) ON DELETE CASCADE
 );
 
+CREATE TABLE Caja (
+    id INT PRIMARY KEY,
+    dinero_inicial float NOT NULL,
+    dinero_total float NOT NULL,
+    fecha_cierre TIMESTAMP NULL,
+    FOREIGN KEY(id) REFERENCES ObjetoBD(id) ON DELETE CASCADE
+);
+
 CREATE TABLE Rol(
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) UNIQUE
@@ -32,7 +40,7 @@ CREATE TABLE Permiso(
     nombre VARCHAR(50) UNIQUE
 );
 
-CREATE TABLE Usuario_Rol (
+CREATE TABLE UsuarioRol (
     usuario_id INT,
     rol_id INT,
     PRIMARY KEY (usuario_id, rol_id),
@@ -40,18 +48,10 @@ CREATE TABLE Usuario_Rol (
     FOREIGN KEY (rol_id) REFERENCES Rol(id) ON DELETE CASCADE
 );
 
-CREATE TABLE Rol_Permiso (
+CREATE TABLE RolPermiso (
     rol_id INT,
     permiso_id INT,
     PRIMARY KEY (rol_id, permiso_id),
     FOREIGN KEY (rol_id) REFERENCES Rol(id) ON DELETE CASCADE,
     FOREIGN KEY (permiso_id) REFERENCES Permiso(id) ON DELETE CASCADE
-);
-
---tabla testing que no hereda de ObjetoBD
-CREATE TABLE Test(
-    id INT AUTO_INCREMENT,
-    texto VARCHAR(500),
-    estado ENUM("ACTIVO","INACTIVO") DEFAULT "ACTIVO",
-    PRIMARY KEY(id)
 );

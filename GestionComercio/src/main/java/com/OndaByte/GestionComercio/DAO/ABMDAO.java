@@ -3,8 +3,6 @@ package com.OndaByte.GestionComercio.DAO;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.sql2o.Connection;
 
 import com.OndaByte.GestionComercio.util.Log;
