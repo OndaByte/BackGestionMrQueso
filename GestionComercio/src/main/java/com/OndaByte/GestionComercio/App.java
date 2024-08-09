@@ -24,5 +24,7 @@ public class App
 
         get("/Productos", ProductoControl.listar);
         post("/Productos/Alta", ProductoControl.alta);
+        post("/Productos/:id/SumarStock", ProductoControl.sumarStock);
+        delete("/Productos/:id", ProductoControl.baja);
     }
 }

@@ -31,4 +31,27 @@ public class ProductoControl {
         res.status(500);
         return "Error al insertar producto";
     };
+
+    public static Route baja = (Request req, Response res) -> {
+        DAOProducto dao = new DAOProducto();
+        String id = req.params(":id");
+        if (dao.baja(id, false)){
+            res.status(200);
+            return "Baja exitosa";
+        }
+        res.status(500);
+        return "Erro al dar de baja";
+    };
+
+    public static Route sumarStock = (Request req, Response res) -> {
+        DAOProducto dao = new DAOProducto();
+        String id = req.params(":id");
+        String cant = req.queryParams("cant");
+        if (dao.actualizarStock(id,cant)){
+            res.status(200);
+            return "Stock actualizado";
+        }
+        res.status(500);
+        return "Error al actualizar";
+    };
 }

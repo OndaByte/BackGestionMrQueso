@@ -134,15 +134,14 @@ public abstract class ABMDAO <T> {
     public T filtrar(String id){
         try {
             String query = "SELECT * FROM "+ this.getTabla() + " WHERE "+ this.getClave()+" = :"+this.getClave();
+            System.out.println(query);
             Connection con = DAOSql2o.getSql2o().open();
-            return con.createQuery(query).executeScalar(this.getClase());
-  
+            return con.createQuery(query).addParameter(this.getClave(), id).executeAndFetchFirst(this.getClase());
         } catch (Exception e) {
             Log.log(e, ABMDAO.class);
         }
         return null;
     }
-
 
     public List<T> filtrar(List<String> campos, List<String> valores, List<Integer> condiciones){
         try{
