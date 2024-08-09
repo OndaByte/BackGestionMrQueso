@@ -1,17 +1,18 @@
 package com.OndaByte.GestionComercio.control;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.OndaByte.GestionComercio.DAO.DAOProducto;
 import com.OndaByte.GestionComercio.modelo.Producto;
 import com.OndaByte.GestionComercio.util.Seguridad;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import org.mindrot.jbcrypt.BCrypt;
 
 public class ProductoControl {
+
+    private static ObjectMapper objectMapper = new ObjectMapper();
 
     public static Route listar = (Request req, Response res) -> {
         DAOProducto dao = new DAOProducto();
@@ -22,8 +23,12 @@ public class ProductoControl {
 
     public static Route alta = (Request req, Response res) -> {
         DAOProducto dao = new DAOProducto();
-        String usuario = req.queryParams("usuario");
-        String contra = req.queryParams("contra");
-        return "Error al registrar";
+        Producto nuevo = objectMapper.readValue(req.body(), Producto.class);
+        if (dao.alta(nuevo)){
+            res.status(201);
+            return "Alta exitosa";
+        }
+        res.status(500);
+        return "Error al insertar producto";
     };
 }

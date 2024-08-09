@@ -1,4 +1,5 @@
 package com.OndaByte.GestionComercio;
+import com.OndaByte.GestionComercio.control.ProductoControl;
 import com.OndaByte.GestionComercio.control.UsuarioControl;
 import com.OndaByte.GestionComercio.filtros.FiltroAutenticador;
 
@@ -19,5 +20,9 @@ public class App
         get("/login", UsuarioControl.loginForm);
         post("/login", UsuarioControl.login);
         post("/protegido/eliminar", UsuarioControl.baja);
+
+
+        get("/Productos", ProductoControl.listar);
+        post("/Productos/Alta", ProductoControl.alta);
     }
 }

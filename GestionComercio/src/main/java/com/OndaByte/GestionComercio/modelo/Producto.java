@@ -5,6 +5,7 @@ public class Producto extends ObjetoBD {
     private float precio_costo;
     private float precio_venta;
     private long stock_actual;
+    private long stock_frizado;
     private String ingredientes_receta;
 
     public String getNombre() {
@@ -47,6 +48,7 @@ public class Producto extends ObjetoBD {
         this.ingredientes_receta = ingredientes_receta;
     }
 
+
     public void copiar(Producto nuevo){
         this.ingredientes_receta = nuevo.getIngredientes_receta();
         this.nombre = nuevo.getNombre();
@@ -60,5 +62,23 @@ public class Producto extends ObjetoBD {
             throw new Exception("Al actualizar stock de producto, el resultado no puede ser negativo.\n");
         }
         this.stock_actual+=cant;
+    }
+
+	public long getStock_frizado() {
+		return stock_frizado;
+	}
+
+	public void setStock_frizado(long stock_frizado) {
+		this.stock_frizado = stock_frizado;
+	}
+
+    public String toString(){
+        return "{"+super.toString()
+            +" \"nombre\" : \""+nombre+"\","
+            +" \"precio_costo\" : "+precio_costo+","
+            +" \"precio_venta\" : "+precio_venta+","
+            +" \"stock_actual\" : "+stock_actual+","
+            +" \"stock_frizado\" : "+stock_frizado+","
+            +" \"ingredientes_receta\" : \""+ingredientes_receta+"\"}";
     }
 }

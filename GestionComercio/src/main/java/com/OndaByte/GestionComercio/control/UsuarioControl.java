@@ -44,7 +44,6 @@ public class UsuarioControl {
         }
     };
 
-
     public static Route cambiarcontra = (Request req, Response res) -> {
         DAOUsuario dao = new DAOUsuario();
         String usuario = req.queryParams("usuario");

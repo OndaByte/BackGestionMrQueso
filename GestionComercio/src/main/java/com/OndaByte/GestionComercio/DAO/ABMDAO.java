@@ -1,7 +1,6 @@
 package com.OndaByte.GestionComercio.DAO;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import org.sql2o.Connection;
@@ -43,6 +42,7 @@ public abstract class ABMDAO <T> {
             String columnas = " (";
             String valores = " (";
             for (Field f : this.campos){
+                if (f.getName().equals(this.getClave())) continue;
                 columnas = columnas + f.getName() + ",";
                 valores = valores + ":" + f.getName() + ",";
             }
@@ -130,6 +130,19 @@ public abstract class ABMDAO <T> {
         }
         return null;
     }
+
+    public T filtrar(String id){
+        try {
+            String query = "SELECT * FROM "+ this.getTabla() + " WHERE "+ this.getClave()+" = :"+this.getClave();
+            Connection con = DAOSql2o.getSql2o().open();
+            return con.createQuery(query).executeScalar(this.getClase());
+  
+        } catch (Exception e) {
+            Log.log(e, ABMDAO.class);
+        }
+        return null;
+    }
+
 
     public List<T> filtrar(List<String> campos, List<String> valores, List<Integer> condiciones){
         try{

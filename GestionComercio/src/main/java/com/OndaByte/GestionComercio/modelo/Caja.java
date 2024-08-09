@@ -9,7 +9,7 @@ public class Caja extends ObjetoBD{
 
     public Caja(float dinero_inicial){
     	this.dinero_inicial=dinero_inicial;
-	this.dinero_total=this.dinero_inicial;
+	    this.dinero_total=this.dinero_inicial;
     }
     public void sumarTotal(float x) throws Exception{
         if(this.dinero_total + x < 0)

@@ -40,6 +40,6 @@ public abstract class ObjetoBD {
 	}
 
     public String toString(){
-        return "id : "+id+", "+"creado : \""+creado.toString()+"\", ultMod : \""+ultMod.toString()+"\", estado : \""+estado+"\"";
+        return "\"id\" : "+id+", "+"\"creado\": \""+creado.toString()+"\", \"ultMod\" : \""+ultMod.toString()+"\", \"estado\" : \""+estado+"\",";
     }
 }
