@@ -7,12 +7,7 @@ public class Caja extends ObjetoBD{
     private float dinero_total=0;
     private Date fecha_cierre;
 
-    public Caja() {
-        super("Caja");
-    }
-
     public Caja(float dinero_inicial){
-        super("Caja");
     	this.dinero_inicial=dinero_inicial;
 	this.dinero_total=this.dinero_inicial;
     }

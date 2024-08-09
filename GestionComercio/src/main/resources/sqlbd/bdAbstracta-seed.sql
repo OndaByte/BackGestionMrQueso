@@ -1,9 +1,3 @@
--- Inserciones en ObjetoBD
-INSERT INTO ObjetoBD (id, tipo) VALUES (1, 'Usuario');
-INSERT INTO ObjetoBD (id, tipo) VALUES (2, 'Usuario');
-INSERT INTO ObjetoBD (id, tipo) VALUES (3, 'Usuario');
-INSERT INTO ObjetoBD (id, tipo) VALUES (4, 'Usuario');
-INSERT INTO ObjetoBD (id, tipo) VALUES (5, 'Usuario');
 -- Inserciones en Usuario
 INSERT INTO Usuario (id, usuario, contra) VALUES (1, 'usuario1', 'contra1');
 INSERT INTO Usuario (id, usuario, contra) VALUES (2, 'usuario2', 'contra2');
@@ -22,14 +16,24 @@ INSERT INTO Permiso (nombre) VALUES ('Escribir');
 INSERT INTO Permiso (nombre) VALUES ('Eliminar');
 
 -- Inserciones en la tabla Usuario_Rol
-INSERT INTO Usuario_Rol (usuario_id, rol_id) VALUES (1, 1); -- usuario1 es Admin
-INSERT INTO Usuario_Rol (usuario_id, rol_id) VALUES (5, 1); -- usuario5 es Admin
-INSERT INTO Usuario_Rol (usuario_id, rol_id) VALUES (2, 2); -- usuario2 es User
-INSERT INTO Usuario_Rol (usuario_id, rol_id) VALUES (3, 3); -- usuario3 es Guest
+INSERT INTO UsuarioRol (usuario_id, rol_id) VALUES (1, 1); -- usuario1 es Admin
+INSERT INTO UsuarioRol (usuario_id, rol_id) VALUES (5, 1); -- usuario5 es Admin
+INSERT INTO UsuarioRol (usuario_id, rol_id) VALUES (2, 2); -- usuario2 es User
+INSERT INTO UsuarioRol (usuario_id, rol_id) VALUES (3, 3); -- usuario3 es Guest
 
 -- Inserciones en la tabla Rol_Permiso
-INSERT INTO Rol_Permiso (rol_id, permiso_id) VALUES (1, 1); -- Admin tiene permiso Leer
-INSERT INTO Rol_Permiso (rol_id, permiso_id) VALUES (1, 2); -- Admin tiene permiso Escribir
-INSERT INTO Rol_Permiso (rol_id, permiso_id) VALUES (1, 3); -- Admin tiene permiso Eliminar
-INSERT INTO Rol_Permiso (rol_id, permiso_id) VALUES (2, 1); -- User tiene permiso Leer
-INSERT INTO Rol_Permiso (rol_id, permiso_id) VALUES (3, 1); -- Guest tiene permiso Leer
+INSERT INTO RolPermiso (rol_id, permiso_id) VALUES (1, 1); -- Admin tiene permiso Leer
+INSERT INTO RolPermiso (rol_id, permiso_id) VALUES (1, 2); -- Admin tiene permiso Escribir
+INSERT INTO RolPermiso (rol_id, permiso_id) VALUES (1, 3); -- Admin tiene permiso Eliminar
+INSERT INTO RolPermiso (rol_id, permiso_id) VALUES (2, 1); -- User tiene permiso Leer
+INSERT INTO RolPermiso (rol_id, permiso_id) VALUES (3, 1); -- Guest tiene permiso Leer
+
+
+INSERT INTO Producto (nombre, precio_costo, precio_venta, stock_actual, stock_frizado, ingredientes_receta)
+VALUES 
+('Pizza Margherita', 3.50, 8.00, 50, 10, 'Harina, Agua, Tomate, Mozzarella, Albahaca'),
+('Empanadas de Carne', 1.20, 3.00, 100, 20, 'Carne, Cebolla, Huevo, Aceituna, Masa'),
+('Hamburguesa Clásica', 2.00, 5.50, 70, 15, 'Carne de res, Lechuga, Tomate, Queso, Pan'),
+('Sushi Roll', 4.00, 12.00, 40, 5, 'Arroz, Alga nori, Salmón, Aguacate, Pepino'),
+('Lasaña de Carne', 3.80, 9.50, 30, 8, 'Pasta, Carne, Tomate, Mozzarella, Bechamel');
+

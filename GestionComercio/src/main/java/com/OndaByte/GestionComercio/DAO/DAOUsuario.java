@@ -6,7 +6,7 @@ public class DAOUsuario extends ABMDAO<Usuario>{
     private String clave = "id";
 
     public DAOUsuario(){
-        this.setHereda();
+        super();
     }
 
     public Class<Usuario> getClase(){

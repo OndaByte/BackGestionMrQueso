@@ -5,7 +5,7 @@ public abstract class ItemCaja extends ObjetoBD{
     private float total;
 
     public ItemCaja(String tipo) {
-        super(tipo);
+        this.tipo = tipo;
     }
 
     public void setTotal(float total){

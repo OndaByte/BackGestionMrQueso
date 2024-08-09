@@ -12,9 +12,6 @@ public abstract class ObjetoBD {
     private Date creado=new Date();
     private Date ultMod=new Date();
     private String estado="ACTIVO";
-    private String tipo;
-    
-	public ObjetoBD(String tipo){ this.tipo = tipo;}
 
 	public int getId() {
 		return id;
@@ -42,10 +39,7 @@ public abstract class ObjetoBD {
 		this.estado = estado;
 	}
 
-    public String getTipo() {
-		return tipo;
-	}
     public String toString(){
-        return "id : "+id+", "+"creado : \""+creado.toString()+"\", ultMod : \""+ultMod.toString()+"\", estado : \""+estado+"\", tipo : \""+tipo+"\"";
+        return "id : "+id+", "+"creado : \""+creado.toString()+"\", ultMod : \""+ultMod.toString()+"\", estado : \""+estado+"\"";
     }
 }
