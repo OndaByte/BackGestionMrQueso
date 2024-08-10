@@ -68,7 +68,7 @@ public abstract class ABMDAO <T> {
             String set="";
             String query;
             for (Field f : this.campos) {
-                if(f.getName().equals(this.getClave())) continue;
+                if(f.getName().equals(this.getClave()) || f.getName().equals("ultMod") || f.getName().equals("creado")) continue;
                 set = set + f.getName() + "=:" + f.getName()+", ";
             }
             if(set.length()>2)
@@ -134,7 +134,6 @@ public abstract class ABMDAO <T> {
     public T filtrar(String id){
         try {
             String query = "SELECT * FROM "+ this.getTabla() + " WHERE "+ this.getClave()+" = :"+this.getClave();
-            System.out.println(query);
             Connection con = DAOSql2o.getSql2o().open();
             return con.createQuery(query).addParameter(this.getClave(), id).executeAndFetchFirst(this.getClase());
         } catch (Exception e) {

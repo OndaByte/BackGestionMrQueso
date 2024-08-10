@@ -26,5 +26,6 @@ public class App
         post("/Productos/Alta", ProductoControl.alta);
         post("/Productos/:id/SumarStock", ProductoControl.sumarStock);
         delete("/Productos/:id", ProductoControl.baja);
+        post("/Productos/:id/Modificar", ProductoControl.modificar);
     }
 }

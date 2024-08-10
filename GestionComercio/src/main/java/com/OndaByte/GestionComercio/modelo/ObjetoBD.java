@@ -9,8 +9,8 @@ import java.util.Date;
  */
 public abstract class ObjetoBD {
     private int id;
-    private Date creado=new Date();
-    private Date ultMod=new Date();
+    private String creado= "";
+    private String ultMod= "";
     private String estado="ACTIVO";
 
 	public int getId() {
@@ -19,16 +19,16 @@ public abstract class ObjetoBD {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public Date getCreado() {
+	public String getCreado() {
 		return creado;
 	}
-	public void setCreado(Date creado) {
+	public void setCreado(String creado) {
 		this.creado = creado;
 	}
-	public Date getUltMod() {
+	public String getUltMod() {
 		return ultMod;
 	}
-	public void setUltMod(Date ultMod) {
+	public void setUltMod(String ultMod) {
 		this.ultMod = ultMod;
 	}
 	public String getEstado() {

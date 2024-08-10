@@ -3,7 +3,6 @@ import java.util.List;
 
 import com.OndaByte.GestionComercio.DAO.DAOProducto;
 import com.OndaByte.GestionComercio.modelo.Producto;
-import com.OndaByte.GestionComercio.util.Seguridad;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import spark.Request;
@@ -30,6 +29,19 @@ public class ProductoControl {
         }
         res.status(500);
         return "Error al insertar producto";
+    };
+
+    public static Route modificar = (Request req, Response res) -> {
+        DAOProducto dao = new DAOProducto();
+        String id = req.params(":id");
+        Producto nuevo = objectMapper.readValue(req.body(), Producto.class);
+        nuevo.setId(Integer.parseInt(id));
+        if (dao.modificar(nuevo)){
+            res.status(201);
+            return "Actualizacion exitosa";
+        }
+        res.status(500);
+        return "Error al actualizar el producto";
     };
 
     public static Route baja = (Request req, Response res) -> {
