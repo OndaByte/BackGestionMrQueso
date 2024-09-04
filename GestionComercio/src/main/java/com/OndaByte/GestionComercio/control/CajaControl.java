@@ -9,6 +9,7 @@ import com.OndaByte.GestionComercio.DAO.DAOProducto;
 import com.OndaByte.GestionComercio.DAO.DAOCaja;
 import com.OndaByte.GestionComercio.modelo.Caja;
 import com.OndaByte.GestionComercio.modelo.Producto;
+import com.OndaByte.GestionComercio.util.Log;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import spark.Request;
@@ -18,56 +19,61 @@ import spark.Route;
 public class CajaControl {
 
     private static ObjectMapper objectMapper = new ObjectMapper();
-
 	
-	/**
-	* Method: Get.
-	* Params: dineroI
- 	*/
-    public static Route abrirCaja = (Request req, Response res) -> {
+	//AbrirCaja
+	public static Route abrirCaja = (Request req, Response res) -> {
 		try{
+
 			float dineroI = Float.parseFloat(req.params("dineroI"));
 			if(dineroI<0){
 				res.status(400);
-				return "";
-
+				return "Error. No podes abrir la caja con saldo negativo mostro.";
 		    }
-		}catch(Exception nfe){
-			//logger
-		}
-	    DAOCaja dao = new DAOCaja();
-		Caja actual = dao.getCaja();
-		if(actual != null){
-			res.status(400);
-			return actual.toString();
-		}
-		
-		
-        return usuarios.toString();
-    };
 
+			DAOCaja dao = new DAOCaja();
+			Caja actual = dao.getCaja();
+			if(actual != null){
+				res.status(400);
+				return "Caja ya abierta kpo";
+			}
+			if(dao.alta(new Caja(dineroI))){
+				res.status(200);
+				return "Caja abierta con exito kpo";
+			}
+		}catch(Exception e){
+			Log.log(e,CajaControl.class);
+		}
+		
+    };
+	//CerrarCaja
     public static Route alta = (Request req, Response res) -> {
-        DAOProducto dao = new DAOProducto();
-        Producto nuevo = objectMapper.readValue(req.body(), Producto.class);
-        if (dao.alta(nuevo)){
-            res.status(201);
-            return "Alta exitosa";
-        }
-        res.status(500);
-        return "Error al insertar producto";
+        try{
+			DAOCaja dao = new DAOCaja();
+			dao.cerrarCaja();
+			res.status(200);
+			return "Caja cerrada kpo";
+		}
+		catch (Exception e){
+			res.status(400);
+			return "No hay cajas abiertas kpo";
+		}
     };
-
-    public static Route modificar = (Request req, Response res) -> {
-        DAOProducto dao = new DAOProducto();
-        String id = req.params(":id");
-        Producto nuevo = objectMapper.readValue(req.body(), Producto.class);
-        nuevo.setId(Integer.parseInt(id));
-        if (dao.modificar(nuevo)){
-            res.status(201);
-            return "Actualizacion exitosa";
-        }
-        res.status(500);
-        return "Error al actualizar el producto";
+	//Caja
+    public static Route getCaja = (Request req, Response res) -> {
+		try{
+			DAOCaja dao = new DAOCaja();
+			Caja aux = dao.getCaja();
+			if(aux == null){
+				res.status(404);
+				return "No hay caja man";
+			}
+			res.status(200);
+			return aux.toString();
+		}
+		catch(Exception e){
+			res.status(404);
+			return "No se que paso man, error inesperado";
+		}
     };
 
     public static Route baja = (Request req, Response res) -> {
@@ -92,6 +98,4 @@ public class CajaControl {
         res.status(500);
         return "Error al actualizar";
     };
-}
-
 }
