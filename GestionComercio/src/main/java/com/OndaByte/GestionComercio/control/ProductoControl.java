@@ -3,6 +3,8 @@ import java.util.List;
 
 import com.OndaByte.GestionComercio.DAO.DAOProducto;
 import com.OndaByte.GestionComercio.modelo.Producto;
+import com.OndaByte.GestionComercio.util.Controles;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import spark.Request;
@@ -66,4 +68,15 @@ public class ProductoControl {
         res.status(500);
         return "Error al actualizar";
     };
+
+	 public void controlesProducto(Producto nuevo){
+        Controles.parametroStringNoVacioNulo("nombre", nuevo.getNombre());
+//        parametroStringNoVacioNulo("ingredientes_receta", nuevo.getIngredientes_receta());
+        Controles.parametrosNoCeroNegativo("precio_costo",nuevo.getPrecio_costo(),true);
+        Controles.parametrosNoCeroNegativo("precio_venta",nuevo.getPrecio_venta(),false);
+        Controles.parametrosNoCeroNegativo("stock_actual", nuevo.getStock_actual(),true); 
+        if(nuevo.getPrecio_costo() > nuevo.getPrecio_venta()){
+            throw new IllegalArgumentException("El costo del producto no puede ser mayor a su precio de venta.");
+        }
+    }
 }
