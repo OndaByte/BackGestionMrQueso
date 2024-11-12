@@ -14,12 +14,12 @@ public class App
     public static void main( String[] args )
     {
         before("/protegido/*", FiltroAutenticador.filtro);
-        get("/protegido/usuarios", UsuarioControl.usuarios);
-        post("/registrar", UsuarioControl.registrar);
         post("/protegido/actualizar", UsuarioControl.cambiarcontra);
+        get("/protegido/usuarios", UsuarioControl.usuarios);
+        post("/protegido/eliminar", UsuarioControl.baja);
+        post("/registrar", UsuarioControl.registrar);
         get("/login", UsuarioControl.loginForm);
         post("/login", UsuarioControl.login);
-        post("/protegido/eliminar", UsuarioControl.baja);
 
 
         get("/Productos", ProductoControl.listar);

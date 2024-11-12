@@ -20,7 +20,7 @@ import spark.Response;
 import spark.Route;
 
 public class VentaControl {
-
+/*
 	//    @PostMapping(value = "Venta")
 
 	private static ObjectMapper objectMapper = new ObjectMapper();
@@ -186,5 +186,5 @@ public class VentaControl {
                 throw new IllegalArgumentException("Se excedio el stock del producto '"+aux.getNombre()+"'.\n");
             }
         }
-    }	
+    }	*/
 }

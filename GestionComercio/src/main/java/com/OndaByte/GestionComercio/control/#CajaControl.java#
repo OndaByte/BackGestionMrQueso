@@ -2,7 +2,7 @@ package com.OndaByte.GestionComercio.control;
 import java.util.List;
 
 import com.OndaByte.GestionComercio.DAO.DAOProducto;
-//import com.OndaByte.GestionComercio.DAO.DAOCaja;
+import com.OndaByte.GestionComercio.DAO.DAOCaja;
 import com.OndaByte.GestionComercio.modelo.Caja;
 import com.OndaByte.GestionComercio.modelo.Producto;
 import com.OndaByte.GestionComercio.util.Log;
@@ -13,7 +13,7 @@ import spark.Response;
 import spark.Route;
 
 public class CajaControl {
-/*
+
     private static ObjectMapper objectMapper = new ObjectMapper();
 	
 	//AbrirCaja
@@ -25,7 +25,7 @@ public class CajaControl {
 				res.status(400);
 				return "Error. No podes abrir la caja con saldo negativo mostro.";
 		    }
-
+			res.
 			DAOCaja dao = new DAOCaja();
 			Caja actual = dao.getCaja();
 			if(actual != null){
@@ -94,6 +94,4 @@ public class CajaControl {
         res.status(500);
         return "Error al actualizar";
     };
-
-*/
 }

@@ -2,6 +2,7 @@ package com.OndaByte.GestionComercio.control;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.OndaByte.GestionComercio.DAO.DAORol;
 import com.OndaByte.GestionComercio.DAO.DAOUsuario;
 import com.OndaByte.GestionComercio.modelo.Usuario;
 import com.OndaByte.GestionComercio.peticiones.LoginPost;
@@ -21,22 +22,24 @@ public class UsuarioControl {
         DAOUsuario dao = new DAOUsuario();
         List<Usuario> usuarios = dao.listar();
         res.status(200);
-        return usuarios.toString();
+		return usuarios.toString();
     };
-
+	// FALTA DEVOLVER TODOS LOS PERMISOS DEL USUARIO
     public static Route login = (Request req, Response res) -> {
-        LoginPost peticion = objectMapper.readValue(req.body(), LoginPost.class);
+		LoginPost peticion = objectMapper.readValue(req.body(), LoginPost.class);
         //ESTO TENGO QUE MOVERLO A MANEJADOR DE EXCEPCIONES/CONTROLES
         if(peticion.getUsuario() == null || peticion.getContra() == null) {
             res.status(400);
             return "Usuario y Contraseña requeridos";
         }
-        Usuario aux = getUsuario(peticion.getUsuario());
-
+		DAOUsuario dao = new DAOUsuario();
+		DAORol daoRol = new DAORol();
+		Usuario aux = dao.getUsuario(peticion.getUsuario());
         if (aux != null && BCrypt.checkpw(peticion.getContra(), aux.getContra())){
-            res.header("Token",Seguridad.getToken(peticion.getUsuario()));
+			
+            res.body("{ \"token\" : \" "+Seguridad.getToken(aux.getUsuario())+", \"permisos\" : " + daoRol.getPermisosUsuario(aux.getId()));
             res.status(200);
-            return "Loguin exitoso";
+			return res.body();
         }
         else{
             res.status(500);
@@ -55,7 +58,7 @@ public class UsuarioControl {
             res.status(400);
             return "Usuario y Contraseña requeridos";
         }
-        Usuario aux = getUsuario(usuario);
+        Usuario aux = dao.getUsuario(usuario);
         if (BCrypt.checkpw(contra, aux.getContra())){
             aux.setContra(BCrypt.hashpw(nueva, BCrypt.gensalt()));
             if(dao.modificar(aux)){
@@ -103,21 +106,4 @@ public class UsuarioControl {
         DAOUsuario dao = new DAOUsuario();
         return dao.baja(id,Boolean.valueOf(borrar));
     };
-
-    private static Usuario getUsuario(String usuario){
-        DAOUsuario dao = new DAOUsuario();
-        List<String> campos = new ArrayList();
-        List<String> valores = new ArrayList();
-        List<Integer> condiciones = new ArrayList();
-        campos.add("usuario");
-        valores.add(usuario);
-        condiciones.add(0);
-        List<Usuario> usuarios = dao.filtrar(campos, valores, condiciones);
-        if(usuarios.size()>0){
-            return usuarios.get(0);
-        }
-        else{
-            return null;
-        }
-    }
 }

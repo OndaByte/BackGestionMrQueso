@@ -17,7 +17,7 @@ public class FiltroAutenticador {
         if (aux != null){
             String token = Seguridad.validar(aux);
             if(token != null && token.equals(aux)){
-                res.header("Token",token);
+                res.header("Token", token);
                 res.status(204);
             }
             else{

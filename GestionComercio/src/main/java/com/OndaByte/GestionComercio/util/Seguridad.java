@@ -7,14 +7,15 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Seguridad {
+	//ESTO SE TIENE QUE MOVER A UN CONFIG
     private static String clave = "IqZks/oD7sogY2zrLdkcluLiezFP/s/UbUsxiGEV/ksvFNREePrGYvX5e6dO7xC0KE7LDkyQMfNW";
     private static int expiracion = 42;
     private static int limite = expiracion;
 
     /**
-     * Expiracion en horas 
+     * Devuelve un token dado un usuario.
+	 *
      * @param usuario
-     * @param expiracion
      * @return token
     **/
     public static String getToken(String usuario){
@@ -24,7 +25,7 @@ public class Seguridad {
         return Jwts.builder()
             .setSubject(usuario)
             .setExpiration(cal.getTime())
-            .signWith(SignatureAlgorithm.HS512, clave.getBytes())
+			.signWith(SignatureAlgorithm.HS512, clave.getBytes())
             .compact();
         }
         catch (Exception e){
@@ -33,10 +34,17 @@ public class Seguridad {
         return null;
     }
 
+	  /**
+     * Valida si el token es valido/no expiro, retorna el token si es valido/uno nuevo si habia expirado, nulo si el token era invalido.
+	 * 
+     * @param usuario
+     * @return token
+    **/
     public static String validar(String token){
-        try{
-            Jwts.parser()
-            .setSigningKey(clave.getBytes())
+	    try{
+			Jwts.parserBuilder()
+			.setSigningKey(clave.getBytes())
+			.build()
             .parseClaimsJws(token);
             return token;
         }

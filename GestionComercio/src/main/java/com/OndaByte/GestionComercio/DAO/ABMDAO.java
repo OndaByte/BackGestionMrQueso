@@ -24,6 +24,9 @@ public abstract class ABMDAO <T> {
     
     public String getTabla(){return this.getClase().getSimpleName();}
 
+	/**
+	 * Reviso que sean clases definidas por OndaByte del paquete modelo.
+	 */
     private void setCampos(){
         Class clase = this.getClase();
         while(clase.getName().contains("OndaByte") && clase.getName().contains("modelo")){
@@ -34,15 +37,25 @@ public abstract class ABMDAO <T> {
         }
     }
 
+ /**
+	 * Da de alta un objeto de la clase T en la base de datos.
+	 *
+	 * @param t int - elemento a ser dado de alta.
+	 *
+	 * @return boolean, verdadero si el alta fue exitosa, falso en caso contrario.
+	 */
     public boolean alta(T t) {
         try(Connection con = DAOSql2o.getSql2o().beginTransaction()){
+			// Esto tendria que abstraerlo a un gestor de errores.
             if(t.getClass() != this.getClase()){
                 throw (new Exception("ERROR: el objeto pasado por parametro es del tipo incorrecto, el tipo de este DAO es: "+this.getClase().getName()));
             }
+
+			// Tendria que abstraer la conversion de objeto a lista de clave valor
             String columnas = " (";
             String valores = " (";
             for (Field f : this.campos){
-                if (f.getName().equals(this.getClave())) continue;
+                if (f.getName().equals(this.getClave()) || f.getName().equals("creado") || f.getName().equals("ultMod")) continue;
                 columnas = columnas + f.getName() + ",";
                 valores = valores + ":" + f.getName() + ",";
             }
@@ -52,6 +65,7 @@ public abstract class ABMDAO <T> {
             query = "INSERT INTO " + this.getTabla() + columnas + " VALUES" + valores;
             con.createQuery(query).bind(t).executeUpdate();
             con.commit();
+			
             return true;
         }
         catch (Exception e){
@@ -62,6 +76,8 @@ public abstract class ABMDAO <T> {
 
     public boolean modificar(T t) {
         try(Connection con = DAOSql2o.getSql2o().beginTransaction()){
+
+			// Esto tendria que abstraerlo a un gestor de errores.
             if(t.getClass() != this.getClase()){
                 throw (new Exception("ERROR: el objeto pasado por parametro es del tipo incorrecto, el tipo de este DAO es: "+this.getClase().getName()));
             }
@@ -84,6 +100,13 @@ public abstract class ABMDAO <T> {
         return false;
     }
 
+  /**
+	 * Elimina el objeto de tipo T asociado a id
+	 *
+	 * @param int id - id del elemento a eliminar.
+	 * @param boolean borrar - si borar es verdadero se realiza la baja de forma permanente, si es falso se puede recuperar modificando la bd.
+	 * @return verdadero si la baja fue exitosa, falso en caso contrario.
+	 */
     public boolean baja(String id, boolean borrar){
         try(Connection con = DAOSql2o.getSql2o().open()){
             String query;
@@ -100,6 +123,11 @@ public abstract class ABMDAO <T> {
         return false;
     }
     
+/**
+	 * Devulve todos los elementos de tipo T en la bd
+	 *
+	 * @return lista de todos los elementos
+	 */
     public List<T> listar(){
         try{
             Class c = this.getClase();
@@ -113,6 +141,13 @@ public abstract class ABMDAO <T> {
         return null;
     }
 
+/**
+	 * Devulve una lista de los elementos asociados a los ids, la lista tendra los objetos asociados que encuentre, un id puede no tener elemento asociado.
+	 *
+	 * @param ids - arreglo de string
+	 *
+	 * @return lista de todos los elementos asociados a ids
+	 */
     public List<T> listar(String... ids){
         try{
             String aux="";

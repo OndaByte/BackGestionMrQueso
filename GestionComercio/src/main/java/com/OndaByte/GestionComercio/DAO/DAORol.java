@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import org.sql2o.Connection;
 
+import com.OndaByte.GestionComercio.modelo.Permiso;
 import com.OndaByte.GestionComercio.modelo.Rol;
 
 /**
@@ -24,10 +25,12 @@ public class DAORol extends ABMDAO<Rol> {
         return this.clave;
 	}
 
-    public List<Rol> getRolesUsuario(int id){
-        String query = "SELECT Rol.* FROM Rol JOIN UsuarioRol ON Rol.id = UsuarioRol.rol_id WHERE UsuarioRol.usuario_id=:id";
+    public List<Permiso> getPermisosUsuario(int id){
+		String query = "SELECT Permiso.* FROM UsuarioRol ur JOIN RolPermiso rp ON rp.rol_id = ur.rol_id JOIN Permiso ON Permiso.id = rp.permiso_id WHERE ur.usuario_id = :id";
+
         try(Connection con = DAOSql2o.getSql2o().open()){
-            return con.createQuery(query).addParameter("id",id).executeAndFetch(Rol.class);
+            List<Permiso> aux = con.createQuery(query).addParameter("id",id).executeAndFetch(Permiso.class);
+			return aux;
         }
       catch(Exception e) {
             Logger.getLogger(DAORol.class.getName()).log(Level.SEVERE, null, e);

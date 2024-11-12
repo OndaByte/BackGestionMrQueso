@@ -2,7 +2,7 @@ package com.OndaByte.GestionComercio.util;
 
 import java.util.List;
 
-import com.OndaByte.GestionComercio.modelo.ProductoItem;
+//import com.OndaByte.GestionComercio.modelo.ProductoItem;
 
 public class Controles {
     public static void parametrosNoCeroNegativo(String nombre, float valor, boolean cero){
@@ -27,7 +27,7 @@ public class Controles {
             throw new IllegalArgumentException("No se puede inicializar el ID.\n");
         }
     }
-
+/*
     public static void controlTotal(List<ProductoItem> prods, float total) throws Exception {
         float aux = 0;
         for(ProductoItem p : prods){
@@ -36,4 +36,5 @@ public class Controles {
         if (aux != total)
             throw new IllegalArgumentException("El precio total no coincide con los items.");
     }
+*/
 }
