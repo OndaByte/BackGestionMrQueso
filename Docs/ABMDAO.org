@@ -8,10 +8,10 @@ ABMDAO es la abstraccion de la cual heredan todos los DAOs de una bd de datos en
 
 * TODO ACA FALTA PONER LOS REQUISITOS QUE DEBERIA CUMPLIR LA IMPLEMENTACION, DIAGRAMAS UML, ETC
 
-* TODO Implementacion [0/3]
+* TODO Implementacion [0/4]
 ** TODO Paquete e imports [0/1]
 *** TODO Log es un manejador de logs basico, hay que cambiarlo en un futuro. Tambien hay que crear el archivo log.org o similar correspondiente
-#+begin_src java :tangle "../GestionComercio/src/main/java/com/OndaByte/GestionComercio/DAO/AMBDAO.java"
+#+begin_src java :tangle "../GestionComercio/src/main/java/com/OndaByte/GestionComercio/DAO/ABMDAO.java"
 package com.OndaByte.GestionComercio.DAO;
 import com.OndaByte.GestionComercio.util.Log;
 
@@ -22,8 +22,8 @@ import org.sql2o.Connection;
 
 #+end_src
 
-** Metodos abstractos
-#+begin_src java :tangle "../GestionComercio/src/main/java/com/OndaByte/GestionComercio/DAO/AMBDAO.java"
+** TODO Metodos abstractos
+#+begin_src java :tangle "../GestionComercio/src/main/java/com/OndaByte/GestionComercio/DAO/ABMDAO.java"
     /**
      * ABMDAO generico SQL para entidades simples, soporta maximo una herencia de entidad, ej Usuario extend ObjetoBD (esto es old, hay que cambiarlo)
      * @param <T>
@@ -64,7 +64,7 @@ import org.sql2o.Connection;
 
 ** TODO Alta, Baja y modificar
 Tendria que cambiar el retorno de dichos metodos, agregar control de excepciones en algun lado tambien.
-#+begin_src java :tangle "../GestionComercio/src/main/java/com/OndaByte/GestionComercio/DAO/AMBDAO.java"
+#+begin_src java :tangle "../GestionComercio/src/main/java/com/OndaByte/GestionComercio/DAO/ABMDAO.java"
      /**
          * Da de alta un objeto de la clase T en la base de datos.
          *
@@ -162,7 +162,7 @@ Tendria que cambiar el retorno de dichos metodos, agregar control de excepciones
 #+end_src
 
 ** TODO Listados [/]
-#+begin_src java :tangle "../GestionComercio/src/main/java/com/OndaByte/GestionComercio/DAO/AMBDAO.java"
+#+begin_src java :tangle "../GestionComercio/src/main/java/com/OndaByte/GestionComercio/DAO/ABMDAO.java"
 
     /**
          * Devulve todos los elementos de tipo T en la bd
@@ -186,7 +186,7 @@ Tendria que cambiar el retorno de dichos metodos, agregar control de excepciones
 
 *** TODO Listar IDs...?
 Vale la pena esto?, se usa?
-#+begin_src java :tangle "../GestionComercio/src/main/java/com/OndaByte/GestionComercio/DAO/AMBDAO.java"
+#+begin_src java :tangle "../GestionComercio/src/main/java/com/OndaByte/GestionComercio/DAO/ABMDAO.java"
 
     /**
          * Devulve una lista de los elementos asociados a los ids, la lista tendra los objetos asociados que encuentre, un id puede no tener elemento asociado.
@@ -217,7 +217,7 @@ Vale la pena esto?, se usa?
 *** TODO Reimplementar filtrar (parametros)
 El metodo esta bueno pero habria que cambiar lo de lista de campos, valore, condiciones a otra eda, quizas un mapa doble? el filtrar con id deberia ser generico a varias claves (dos parametros, clave y valor)
 
-#+begin_src java :tangle "../GestionComercio/src/main/java/com/OndaByte/GestionComercio/DAO/AMBDAO.java"
+#+begin_src java :tangle "../GestionComercio/src/main/java/com/OndaByte/GestionComercio/DAO/ABMDAO.java"
 
    /**
          * Devuelve el primer elemento asociado a dicho id
