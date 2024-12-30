@@ -216,27 +216,29 @@ public abstract class ABMDAO <T> {
               for (String campo : campos){
                   if(!this.campos.stream().anyMatch(x -> x.getName().equals(campo))){
                       throw(new Exception("El campo \""+campo+"\" no existe"));
-                  } 
+                  }
+				  queryAux += campos.get(i);
                   switch (condiciones.get(i)) {
                       case 0:
-                          queryAux +=campos.get(i)+"=\""+valores.get(i)+"\" AND ";
+                          queryAux += "=\"";
                           break;
                       case 1:
-                          queryAux +=campos.get(i)+"<=\""+valores.get(i)+"\" AND ";
+                          queryAux +="<=\"";
                           break;
                       case 2:
-                          queryAux +=campos.get(i)+"<\""+valores.get(i)+"\" AND ";
+                          queryAux +="<\"";
                           break;
                       case 3:
-                          queryAux +=campos.get(i)+">=\""+valores.get(i)+"\" AND ";
+                          queryAux +=">=\"";
                           break;
                       case 4:
-                          queryAux +=campos.get(i)+">\""+valores.get(i)+"\" AND ";
+                          queryAux +=">\"";
                           break;
                       case 5:
-                          queryAux +=campos.get(i)+" LIKE \""+valores.get(i)+"\" AND ";
+                          queryAux +=" LIKE \"";
                           break;
                   }
+				  queryAux +=valores.get(i) + "\" AND ";
                   i++;
               }
               if(queryAux.length() > 1){queryAux = queryAux.substring(0, queryAux.length()-5);}

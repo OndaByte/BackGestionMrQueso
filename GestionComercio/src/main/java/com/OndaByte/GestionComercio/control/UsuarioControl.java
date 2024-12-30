@@ -37,7 +37,7 @@ public class UsuarioControl {
 		Usuario aux = dao.getUsuario(peticion.getUsuario());
         if (aux != null && BCrypt.checkpw(peticion.getContra(), aux.getContra())){
 			
-            res.body("{ \"token\" : \" "+Seguridad.getToken(aux.getUsuario())+", \"permisos\" : " + daoRol.getPermisosUsuario(aux.getId()));
+            res.body("{ \"token\" : \""+Seguridad.getToken(aux.getUsuario())+"\", \"permisos\" : " + daoRol.getPermisosUsuario(aux.getId()) +"}");
             res.status(200);
 			return res.body();
         }

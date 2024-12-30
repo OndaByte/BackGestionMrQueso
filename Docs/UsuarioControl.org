@@ -1,0 +1,5 @@
+#+title Usuario Control
+#+author: OndaByte
+#+startup: content ident, showeverything
+#+description: Documentacion relacionada al moduco "usuario control"
+
