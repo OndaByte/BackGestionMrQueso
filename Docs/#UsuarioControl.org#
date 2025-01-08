@@ -35,12 +35,11 @@
 
 Peticion
 #+begin_src bash
-    curl -POST "localhost:4567/login" -d '{"usuario":"fran2","contra":"asd"}'
-
+curl -POST "localhost:4567/login" -d '{"usuario":"fran2","contra":"asd"}'
  #+end_src
 Respuesta
 #+begin_src bash
-  { "token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmcmFuMiIsImV4cCI6MTczNTc0MTY1MX0.hvoyTA8g_HCanFTk0mSmexAhmOtEEZmiHGBqTxjIzyBG2Ac5t0k_I8H4a4FMkUH4nB3JT5vN3Y_ucw5VjQzUVA", "permisos" : [{ "id" : 1, "nombre" : "Leer" }, { "id" : 2, "nombre" : "Escribir" }, { "id" : 3, "nombre" : "Eliminar" }]}
+{ "token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmcmFuMiIsImV4cCI6MTczNTc0MTY1MX0.hvoyTA8g_HCanFTk0mSmexAhmOtEEZmiHGBqTxjIzyBG2Ac5t0k_I8H4a4FMkUH4nB3JT5vN3Y_ucw5VjQzUVA", "permisos" : [{ "id" : 1, "nombre" : "Leer" }, { "id" : 2, "nombre" : "Escribir" }, { "id" : 3, "nombre" : "Eliminar" }]}
 #+end_src
 
 #+begin_src java :tangle "../GestionComercio/src/main/java/com/OndaByte/GestionComercio/control/UsuarioControl.java"

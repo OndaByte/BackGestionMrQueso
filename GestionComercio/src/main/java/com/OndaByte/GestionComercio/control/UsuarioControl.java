@@ -1,5 +1,4 @@
 package com.OndaByte.GestionComercio.control;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.OndaByte.GestionComercio.DAO.DAORol;
@@ -8,102 +7,237 @@ import com.OndaByte.GestionComercio.modelo.Usuario;
 import com.OndaByte.GestionComercio.peticiones.LoginPost;
 import com.OndaByte.GestionComercio.util.Seguridad;
 
-import spark.Request;
-import spark.Response;
-import spark.Route;
+
+import io.javalin.http.Context;
+
 import org.mindrot.jbcrypt.BCrypt;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class UsuarioControl {
-
-    private static ObjectMapper objectMapper = new ObjectMapper();
-
-    public static Route usuarios = (Request req, Response res) -> {
-        DAOUsuario dao = new DAOUsuario();
-        List<Usuario> usuarios = dao.listar();
-        res.status(200);
-		return usuarios.toString();
-    };
-	// FALTA DEVOLVER TODOS LOS PERMISOS DEL USUARIO
-    public static Route login = (Request req, Response res) -> {
-		LoginPost peticion = objectMapper.readValue(req.body(), LoginPost.class);
-        //ESTO TENGO QUE MOVERLO A MANEJADOR DE EXCEPCIONES/CONTROLES
-        if(peticion.getUsuario() == null || peticion.getContra() == null) {
-            res.status(400);
-            return "Usuario y Contraseña requeridos";
-        }
+public class UsuarioControl{
+	private static ObjectMapper objectMapper = new ObjectMapper();
+	
+	public static void usuarios (Context ctx) {
 		DAOUsuario dao = new DAOUsuario();
-		DAORol daoRol = new DAORol();
-		Usuario aux = dao.getUsuario(peticion.getUsuario());
-        if (aux != null && BCrypt.checkpw(peticion.getContra(), aux.getContra())){
-			
-            res.body("{ \"token\" : \""+Seguridad.getToken(aux.getUsuario())+"\", \"permisos\" : " + daoRol.getPermisosUsuario(aux.getId()) +"}");
-            res.status(200);
-			return res.body();
-        }
-        else{
-            res.status(500);
-            return "Error al loguear";
-        }
-    };
+        List<Usuario> usuarios = dao.listar();
+		ctx.status(200).json(usuarios);
+	}
 
-    public static Route cambiarcontra = (Request req, Response res) -> {
-        DAOUsuario dao = new DAOUsuario();
-        String usuario = req.queryParams("usuario");
-        String contra = req.queryParams("contra");
-        String nueva = req.queryParams("nueva");
+	public static void login(Context ctx) {
+		LoginPost peticion;
+		try {
+			peticion = objectMapper.readValue(ctx.body(), LoginPost.class);
+
+			//ESTO TENGO QUE MOVERLO A MANEJADOR DE EXCEPCIONES/CONTROLES
+			if(peticion.getUsuario() == null || peticion.getContra() == null) {
+				ctx.status(400).result("Usuario y contraseña requeridos");
+				return;
+			}
+
+			DAOUsuario dao = new DAOUsuario();
+			DAORol daoRol = new DAORol();
+			Usuario aux = dao.getUsuario(peticion.getUsuario());
+
+			if (aux != null && BCrypt.checkpw(peticion.getContra(), aux.getContra())){
+				ctx.status(200).result("{ \"token\" : \""+Seguridad.getToken(aux.getUsuario())+"\", \"permisos\" : " + daoRol.getPermisosUsuario(aux.getId()) +"}\n");
+			}
+			else{
+				ctx.status(500).result("Error al loguear");
+			}
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
+	}
+
+	public static void cambiarcontra(Context ctx) {
+        String usuario = ctx.queryParam("usuario");
+        String contra = ctx.queryParam("contra");
+        String nueva = ctx.queryParam("nueva");
+
         //ESTO TENGO QUE MOVERLO A MANEJADOR DE EXCEPCIONES/CONTROLES
         if(usuario == null || contra == null) {
-            res.status(400);
-            return "Usuario y Contraseña requeridos";
+            ctx.status(400).result("Usuario y Contraseña requeridos");
         }
+
+        DAOUsuario dao = new DAOUsuario();
         Usuario aux = dao.getUsuario(usuario);
+
         if (BCrypt.checkpw(contra, aux.getContra())){
             aux.setContra(BCrypt.hashpw(nueva, BCrypt.gensalt()));
             if(dao.modificar(aux)){
-                res.status(201);
-                return "Contraseña actualizada";
+                ctx.status(201).result("Contraseña actualizada");
             }
             else{
-                res.status(404);
-                return "ERROR: No se pudo actualizar la contraseña";
+                ctx.status(404).result("ERROR: No se pudo actualizar la contraseña");
             }
         }
         else{
-            res.status(500);
-            return "Error al loguear";
+            ctx.status(500).result("Error al loguear");
         }
-    };
+    }
 
-    public static Route registrar = (Request req, Response res) -> {
-        DAOUsuario dao = new DAOUsuario();
-        LoginPost peticion = objectMapper.readValue(req.body(), LoginPost.class);
-        //ESTO TENGO QUE MOVERLO A MANEJADOR DE EXCEPCIONES/CONTROLES
-        if(peticion.getUsuario() == null || peticion.getContra() == null) {
-            res.status(400);
-            return "Usuario y Contraseña requeridos";
-        }
-        Usuario nuevo = new Usuario();
-        nuevo.setUsuario(peticion.getUsuario());
-        nuevo.setContra(BCrypt.hashpw( peticion.getContra(), BCrypt.gensalt()));
-        if(dao.alta(nuevo)){
-            res.status(201);
-            return "Registro exitoso";
-        }
-        else{
-            res.status(500);
-            return "Error al registrar";
-        }
-    };
+    public static void registrar(Context ctx) {
+        LoginPost peticion;
+		try {
+			peticion = objectMapper.readValue(ctx.body(), LoginPost.class);
+			//ESTO TENGO QUE MOVERLO A MANEJADOR DE EXCEPCIONES/CONTROLES
+			if(peticion.getUsuario() == null || peticion.getContra() == null) {
+				ctx.status(400).result("Usuario y Contraseña requeridos");
+			}
 
-    public static Route loginForm = (Request req, Response res) -> {
-        return "no implementado sory";
-    };
-    public static Route baja = (Request req, Response res) -> {
-        String id = req.queryParams("id");
-        String borrar = req.queryParams("borrar");
+			DAOUsuario dao = new DAOUsuario();
+			Usuario nuevo = new Usuario();
+			nuevo.setUsuario(peticion.getUsuario());
+			nuevo.setContra(BCrypt.hashpw( peticion.getContra(), BCrypt.gensalt()));
+
+			if(dao.alta(nuevo)){
+				ctx.status(201).result("Registro exitoso");
+			}
+			else{
+				ctx.status(500).result("Error al registrar");
+			}
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+    }
+
+    public static void loginForm(Context ctx){
+        ctx.status(404).result("no implementado sory");
+    }
+
+	public static void baja(Context ctx) {
+        String id = ctx.queryParam("id");
+        String borrar = ctx.queryParam("borrar");
+
+        if (id == null || borrar == null) {
+            ctx.status(400).result("ID y borrar son requeridos");
+            return;
+        }
+
         DAOUsuario dao = new DAOUsuario();
-        return dao.baja(id,Boolean.valueOf(borrar));
-    };
+        boolean resultado = dao.baja(id, Boolean.parseBoolean(borrar));
+        ctx.status(200).result(String.valueOf(resultado));
+    }
+	
 }
+
+
+
+/*
+  import spark.Request;
+  import spark.Response;
+  import spark.Route;
+
+  public class UsuarioControl {
+
+  private static ObjectMapper objectMapper = new ObjectMapper();
+
+  public static Route usuarios = (Request req, Response res) -> {
+  DAOUsuario dao = new DAOUsuario();
+  List<Usuario> usuarios = dao.listar();
+  res.status(200);
+  return usuarios.toString();
+  };
+
+  public static Route login = (Request req, Response res) -> {
+  LoginPost peticion = objectMapper.readValue(req.body(), LoginPost.class);
+  //ESTO TENGO QUE MOVERLO A MANEJADOR DE EXCEPCIONES/CONTROLES
+  if(peticion.getUsuario() == null || peticion.getContra() == null) {
+  res.status(400);
+  return "Usuario y Contraseña requeridos";
+  }
+
+  DAOUsuario dao = new DAOUsuario();
+  DAORol daoRol = new DAORol();
+  Usuario aux = dao.getUsuario(peticion.getUsuario());
+
+  if (aux != null && BCrypt.checkpw(peticion.getContra(), aux.getContra())){
+  res.body("{ \"token\" : \""+Seguridad.getToken(aux.getUsuario())+"\", \"permisos\" : " + daoRol.getPermisosUsuario(aux.getId()) +"}\n");
+  res.status(200);
+  return res.body();
+  }
+  else{
+  res.status(500);
+  return "Error al loguear";
+  }
+  };
+
+  public static Route cambiarcontra = (Request req, Response res) -> {
+  DAOUsuario dao = new DAOUsuario();
+  String usuario = req.queryParams("usuario");
+  String contra = req.queryParams("contra");
+  String nueva = req.queryParams("nueva");
+
+  //ESTO TENGO QUE MOVERLO A MANEJADOR DE EXCEPCIONES/CONTROLES
+  if(usuario == null || contra == null) {
+  res.status(400);
+  return "Usuario y Contraseña requeridos";
+  }
+
+  Usuario aux = dao.getUsuario(usuario);
+
+  if (BCrypt.checkpw(contra, aux.getContra())){
+  aux.setContra(BCrypt.hashpw(nueva, BCrypt.gensalt()));
+  if(dao.modificar(aux)){
+  res.status(201);
+  return "Contraseña actualizada";
+  }
+  else{
+  res.status(404);
+  return "ERROR: No se pudo actualizar la contraseña";
+  }
+  }
+  else{
+  res.status(500);
+  return "Error al loguear";
+  }
+  };
+
+  public static Route registrar = (Request req, Response res) -> {
+  DAOUsuario dao = new DAOUsuario();
+  LoginPost peticion = objectMapper.readValue(req.body(), LoginPost.class);
+  //ESTO TENGO QUE MOVERLO A MANEJADOR DE EXCEPCIONES/CONTROLES
+  if(peticion.getUsuario() == null || peticion.getContra() == null) {
+  res.status(400);
+  return "Usuario y Contraseña requeridos";
+  }
+
+  Usuario nuevo = new Usuario();
+  nuevo.setUsuario(peticion.getUsuario());
+  nuevo.setContra(BCrypt.hashpw( peticion.getContra(), BCrypt.gensalt()));
+
+  if(dao.alta(nuevo)){
+  res.status(201);
+  return "Registro exitoso";
+  }
+  else{
+  res.status(500);
+  return "Error al registrar";
+  }
+  };
+
+  public static Route loginForm = (Request req, Response res) -> {
+  return "no implementado sory";
+  };
+
+  public static Route baja = (Request req, Response res) -> {
+  String id = req.queryParams("id");
+  String borrar = req.queryParams("borrar");
+  DAOUsuario dao = new DAOUsuario();
+  return dao.baja(id,Boolean.valueOf(borrar));
+  };
+  }
+
+*/

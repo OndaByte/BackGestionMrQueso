@@ -8,12 +8,14 @@ import com.OndaByte.GestionComercio.modelo.Producto;
 import com.OndaByte.GestionComercio.util.Log;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import spark.Request;
-import spark.Response;
-import spark.Route;
+
 
 public class CajaControl {
 /*
+
+  import spark.Request;
+import spark.Response;
+import spark.Route;
     private static ObjectMapper objectMapper = new ObjectMapper();
 	
 	//AbrirCaja

@@ -11,19 +11,19 @@ import com.OndaByte.GestionComercio.util.Seguridad;
  * Autor: Fran
  */
 public class FiltroAutenticador {
-    public static Handler filtro = ctx -> {
-        String aux = ctx.header("Token"); // Obtiene el encabezado "Token"
+    public static void filtro(Context ctx) {
+        String aux = ctx.header("Token");
         
         if (aux != null) {
-            String token = Seguridad.validar(aux); // Valida el token recibido
+            String token = Seguridad.validar(aux);
             if (token != null && token.equals(aux)) {
-                ctx.header("Token", token); // Agrega el token al encabezado de respuesta
-                ctx.status(204); // Devuelve un código de estado 204 (sin contenido)
+                ctx.header("Token", token);
+                ctx.status(204);
             } else {
-                ctx.redirect("/login"); // Redirige al login si el token no es válido
+                ctx.redirect("/login");
             }
         } else {
-            ctx.redirect("/login"); // Redirige al login si no se encuentra el token
+            ctx.redirect("/login");
         }
     };
 }
