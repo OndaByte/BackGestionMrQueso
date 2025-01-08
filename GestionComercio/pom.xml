@@ -19,11 +19,11 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.37</version>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
             <version>2.9.3</version>
-        </dependency>
+        </dependency-->
         <dependency>
             <groupId>org.sql2o</groupId>
             <artifactId>sql2o</artifactId>
@@ -59,6 +59,13 @@
             <artifactId>jackson-core</artifactId>
             <version>2.17.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/io.javalin/javalin -->
+        <dependency>
+            <groupId>io.javalin</groupId>
+            <artifactId>javalin</artifactId>
+            <version>6.3.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
