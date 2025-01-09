@@ -2,16 +2,33 @@ package com.OndaByte.GestionComercio;
 import com.OndaByte.GestionComercio.control.ProductoControl;
 import com.OndaByte.GestionComercio.control.UsuarioControl;
 import com.OndaByte.GestionComercio.filtros.FiltroAutenticador;
+import com.OndaByte.config.Constantes;
 
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
+import java.io.File;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Configurator;
+ 
 /**
  * App
  * Autor: Fran
  */
 public class App {
+
+    private static Logger logger = LogManager.getLogger(App.class.getName());
+
     public static void main(String[] args) {
+        
+        String strPath = App.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+        String log4jConfigPath = strPath.replace(Constantes.JAR_FILE, "classes"+File.separator) + Constantes.CONFIG_LOG_FILE;
+        Configurator.initialize(null, log4jConfigPath );        
+        
+        // FIN config Log4j del archivo XML
+        logger.debug("Init Server");  
+       
         Javalin app = Javalin.create().start(4567);
 
         // Rutas protegidas
@@ -31,5 +48,6 @@ public class App {
         app.patch("/Productos/{id}/SumarStock", ProductoControl::sumarStock); // Cambiado a PATCH por ser actualización parcial
         app.delete("/Productos/{id}", ProductoControl::baja);
         app.put("/Productos/{id}/Modificar", ProductoControl::modificar); // Cambiado a PUT por ser una actualización completa
+
     }
 }
