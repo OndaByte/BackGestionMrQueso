@@ -35,7 +35,7 @@ public abstract class ABMDAO <T> {
     private void setCampos(){
         Class clase = this.getClase();
         while(clase.getName().contains("OndaByte") && clase.getName().contains("modelo")){
-            for (Field f : this.getClase().getDeclaredFields()){
+            for (Field f : clase.getDeclaredFields()){
                 campos.add(f);
             }
             clase = clase.getSuperclass();
