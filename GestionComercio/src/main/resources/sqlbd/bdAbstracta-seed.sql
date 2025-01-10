@@ -37,3 +37,23 @@ VALUES
 ('Sushi Roll', 4.00, 12.00, 40, 5, 'Arroz, Alga nori, Salmón, Aguacate, Pepino'),
 ('Lasaña de Carne', 3.80, 9.50, 30, 8, 'Pasta, Carne, Tomate, Mozzarella, Bechamel');
 
+
+-- Inserciones en la tabla Caja
+INSERT INTO Caja (dinero_inicial, dinero_total, fecha_cierre, estado) VALUES
+(100.0, 200.0, NULL, 'ACTIVO'),
+(200.0, 400.0, NULL, 'ACTIVO');
+
+-- Inserciones en la tabla Movimiento
+INSERT INTO Movimiento (caja_id, descripcion, total, estado) VALUES
+(1, 'Apertura de caja', 100.0, 'ACTIVO'),
+(2, 'Ingreso por ventas', 200.0, 'ACTIVO');
+
+-- Inserciones en la tabla Venta
+INSERT INTO Venta (caja_id, metodo_pago, total, fecha_pago, estado) VALUES
+(1, 'Efectivo', 50.0, CURRENT_TIMESTAMP, 'ACTIVO'),
+(2, 'Tarjeta', 100.0, CURRENT_TIMESTAMP, 'ACTIVO');
+
+-- Inserciones en la tabla Items_venta
+INSERT INTO Items_venta (producto_id, venta_id, cantidad, subtotal, estado) VALUES
+(1, 1, 3, 4.5, 'ACTIVO'),
+(2, 2, 2, 2.4, 'ACTIVO');

@@ -1,11 +1,11 @@
 package com.OndaByte.GestionComercio;
+import com.OndaByte.GestionComercio.control.CajaControl;
 import com.OndaByte.GestionComercio.control.ProductoControl;
 import com.OndaByte.GestionComercio.control.UsuarioControl;
 import com.OndaByte.GestionComercio.filtros.FiltroAutenticador;
 import com.OndaByte.config.Constantes;
 
 import io.javalin.Javalin;
-import io.javalin.http.Handler;
 import java.io.File;
 
 import org.apache.logging.log4j.LogManager;
@@ -48,6 +48,14 @@ public class App {
         app.patch("/Productos/{id}/SumarStock", ProductoControl::sumarStock); // Cambiado a PATCH por ser actualización parcial
         app.delete("/Productos/{id}", ProductoControl::baja);
         app.put("/Productos/{id}/Modificar", ProductoControl::modificar); // Cambiado a PUT por ser una actualización completa
+
+		// Rutas Caja
+		app.post("/AbrirCaja", CajaControl::abrirCaja);
+		app.get("/Caja", CajaControl::getCaja);
+		app.patch("/CerrarCaja", CajaControl::cerrarCaja);
+		app.get("/Cajas", CajaControl::getCajas);
+		app.get("/Caja/{id}", CajaControl::getMovimientos);
+		app.get("/Transacciones", CajaControl::getMovimientosFechas);
 
     }
 }

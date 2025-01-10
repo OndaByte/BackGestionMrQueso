@@ -35,7 +35,7 @@ public abstract class ABMDAO <T> {
     private void setCampos(){
         Class clase = this.getClase();
         while(clase.getName().contains("OndaByte") && clase.getName().contains("modelo")){
-            for (Field f : clase.getDeclaredFields()){
+            for (Field f : this.getClase().getDeclaredFields()){
                 campos.add(f);
             }
             clase = clase.getSuperclass();
@@ -143,10 +143,9 @@ public abstract class ABMDAO <T> {
     */
     public List<T> listar(){
         try{
-            Class c = this.getClase();
             String query = "SELECT * FROM "+ this.getTabla() +" WHERE estado=\"ACTIVO\"";
             Connection con = DAOSql2o.getSql2o().open();
-            return con.createQuery(query).executeAndFetch(c);
+            return con.createQuery(query).executeAndFetch(this.getClase());
         }
         catch (Exception e){
             Log.log(e, ABMDAO.class);
