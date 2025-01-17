@@ -54,6 +54,6 @@ INSERT INTO Venta (caja_id, metodo_pago, total, fecha_pago, estado) VALUES
 (2, 'Tarjeta', 100.0, CURRENT_TIMESTAMP, 'ACTIVO');
 
 -- Inserciones en la tabla Items_venta
-INSERT INTO Items_venta (producto_id, venta_id, cantidad, subtotal, estado) VALUES
+INSERT INTO ItemVenta (producto_id, venta_id, cantidad, subtotal, estado) VALUES
 (1, 1, 3, 4.5, 'ACTIVO'),
 (2, 2, 2, 2.4, 'ACTIVO');

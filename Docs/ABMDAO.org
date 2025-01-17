@@ -219,78 +219,81 @@ El metodo esta bueno pero habria que cambiar lo de lista de campos, valore, cond
 
 #+begin_src java :tangle "../GestionComercio/src/main/java/com/OndaByte/GestionComercio/DAO/ABMDAO.java"
 
-   /**
-         * Devuelve el primer elemento asociado a dicho id
-         *
-         * @param String id - valor de la clave
-         *
-         * @return List<T> - lista de todos los elementos asociados a ids
-         */
-      public T filtrar(String id){
-          try {
-              String query = "SELECT * FROM "+ this.getTabla() + " WHERE "+ this.getClave()+" = :"+this.getClave();
-              Connection con = DAOSql2o.getSql2o().open();
-              return con.createQuery(query).addParameter(this.getClave(), id).executeAndFetchFirst(this.getClase());
-          } catch (Exception e) {
-              Log.log(e, ABMDAO.class);
-          }
-          return null;
-      }
+     /**
+           ,* Devuelve el primer elemento asociado a dicho id
+           ,*
+           ,* @param String id - valor de la clave
+           ,*
+           ,* @return List<T> - lista de todos los elementos asociados a ids
+           ,*/
+        public T filtrar(String id){
+            try {
+                String query = "SELECT * FROM "+ this.getTabla() + " WHERE "+ this.getClave()+" = :"+this.getClave();
+                Connection con = DAOSql2o.getSql2o().open();
+                return con.createQuery(query).addParameter(this.getClave(), id).executeAndFetchFirst(this.getClase());
+            } catch (Exception e) {
+                Log.log(e, ABMDAO.class);
+            }
+            return null;
+        }
 
-/**
-         * Devuelve todos los elementos que cumplan las condiciones para ciertos valores dados evaluados en los campos, las listas de los parametros deben tener el mismo tamaño
-         *
-         * @param List<String> campos - Lista de campos de la entidad a ser evaluados
-         * @param List<String> condiciones - Lista de condiciones a ser aplicadas a los campos, ej: <=, >=, LIKE, etc
-         * @param List<String> valores - Lista de valores con los que se evaluaran las condiciones a cada campo
-         *
-         * @return List<T> - lista de todos los elementos asociados a ids
-         */
-      public List<T> filtrar(List<String> campos, List<String> valores, List<Integer> condiciones){
-          try{
-              if(campos == null || valores == null || condiciones == null || condiciones.size() != campos.size() || campos.size() != valores.size()){
-                  throw(new Exception("Las listas deben tener el mismo tamaño"));
-              }
-              String queryAux = " ";
-              int i = 0; 
-              for (String campo : campos){
-                  if(!this.campos.stream().anyMatch(x -> x.getName().equals(campo))){
-                      throw(new Exception("El campo \""+campo+"\" no existe"));
-                  } 
-                  switch (condiciones.get(i)) {
-                      case 0:
-                          queryAux +=campos.get(i)+"=\""+valores.get(i)+"\" AND ";
-                          break;
-                      case 1:
-                          queryAux +=campos.get(i)+"<=\""+valores.get(i)+"\" AND ";
-                          break;
-                      case 2:
-                          queryAux +=campos.get(i)+"<\""+valores.get(i)+"\" AND ";
-                          break;
-                      case 3:
-                          queryAux +=campos.get(i)+">=\""+valores.get(i)+"\" AND ";
-                          break;
-                      case 4:
-                          queryAux +=campos.get(i)+">\""+valores.get(i)+"\" AND ";
-                          break;
-                      case 5:
-                          queryAux +=campos.get(i)+" LIKE \""+valores.get(i)+"\" AND ";
-                          break;
-                  }
-                  i++;
-              }
-              if(queryAux.length() > 1){queryAux = queryAux.substring(0, queryAux.length()-5);}
-              String query = "SELECT * FROM "+ this.getTabla() + " WHERE";
-              query+= queryAux; 
+  /**
+           ,* Devuelve todos los elementos que cumplan las condiciones para ciertos valores dados evaluados en los campos, las listas de los parametros deben tener el mismo tamaño
+           ,*
+           ,* @param List<String> campos - Lista de campos de la entidad a ser evaluados
+           ,* @param List<String> condiciones - Lista de condiciones a ser aplicadas a los campos, ej: <=, >=, LIKE, etc
+           ,* @param List<String> valores - Lista de valores con los que se evaluaran las condiciones a cada campo
+           ,*
+           ,* @return List<T> - lista de todos los elementos asociados a ids
+           ,*/
+        public List<T> filtrar(List<String> campos, List<String> valores, List<Integer> condiciones){
+            try{
+                if(campos == null || valores == null || condiciones == null || condiciones.size() != campos.size() || campos.size() != valores.size()){
+                    throw(new Exception("Las listas deben tener el mismo tamaño"));
+                }
+                String queryAux = " ";
+                int i = 0; 
+                for (String campo : campos){
+                    if(!this.campos.stream().anyMatch(x -> x.getName().equals(campo))){
+                        throw(new Exception("El campo \""+campo+"\" no existe"));
+                    }
 
-              Connection con = DAOSql2o.getSql2o().open();
-              return con.createQuery(query).executeAndFetch(this.getClase());
-          }
-          catch (Exception e){
-              Log.log(e, ABMDAO.class);
-          }
-          return null;
-      }
-  }
+                   queryAux += campos.get(i);
+                   switch (condiciones.get(i)) {
+                       case 0:
+                           queryAux += "=\"";
+                           break;
+                       case 1:
+                           queryAux +="<=\"";
+                           break;
+                       case 2:
+                           queryAux +="<\"";
+                           break;
+                       case 3:
+                           queryAux +=">=\"";
+                           break;
+                       case 4:
+                           queryAux +=">\"";
+                           break;
+                       case 5:
+                           queryAux +=" LIKE \"";
+                           break;
+                    }
+                    queryAux +=valores.get(i) + "\" AND ";
+                    i++;
+                }
+                if(queryAux.length() > 1){queryAux = queryAux.substring(0, queryAux.length()-5);}
+                String query = "SELECT * FROM "+ this.getTabla() + " WHERE";
+                query+= queryAux; 
+
+                Connection con = DAOSql2o.getSql2o().open();
+                return con.createQuery(query).executeAndFetch(this.getClase());
+            }
+            catch (Exception e){
+                Log.log(e, ABMDAO.class);
+            }
+            return null;
+        }
+    }
 #+end_src
 

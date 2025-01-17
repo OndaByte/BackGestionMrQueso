@@ -76,7 +76,7 @@ CREATE TABLE Venta (
 	--  CONSTRAINT `ventas_ibfk_2` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`)
 );
 
-CREATE TABLE Items_venta (
+CREATE TABLE ItemVenta (
     id INT AUTO_INCREMENT PRIMARY KEY,
     creado TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     ultMod TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE current_timestamp(),

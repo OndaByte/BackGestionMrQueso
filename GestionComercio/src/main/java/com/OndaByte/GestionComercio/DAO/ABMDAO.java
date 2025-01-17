@@ -143,9 +143,10 @@ public abstract class ABMDAO <T> {
     */
     public List<T> listar(){
         try{
+            Class c = this.getClase();
             String query = "SELECT * FROM "+ this.getTabla() +" WHERE estado=\"ACTIVO\"";
             Connection con = DAOSql2o.getSql2o().open();
-            return con.createQuery(query).executeAndFetch(this.getClase());
+            return con.createQuery(query).executeAndFetch(c);
         }
         catch (Exception e){
             Log.log(e, ABMDAO.class);
@@ -216,28 +217,29 @@ public abstract class ABMDAO <T> {
                   if(!this.campos.stream().anyMatch(x -> x.getName().equals(campo))){
                       throw(new Exception("El campo \""+campo+"\" no existe"));
                   }
-				  queryAux += campos.get(i);
-                  switch (condiciones.get(i)) {
-                      case 0:
-                          queryAux += "=\"";
-                          break;
-                      case 1:
-                          queryAux +="<=\"";
-                          break;
-                      case 2:
-                          queryAux +="<\"";
-                          break;
-                      case 3:
-                          queryAux +=">=\"";
-                          break;
-                      case 4:
-                          queryAux +=">\"";
-                          break;
-                      case 5:
-                          queryAux +=" LIKE \"";
-                          break;
+
+                 queryAux += campos.get(i);
+                 switch (condiciones.get(i)) {
+                     case 0:
+                         queryAux += "=\"";
+                         break;
+                     case 1:
+                         queryAux +="<=\"";
+                         break;
+                     case 2:
+                         queryAux +="<\"";
+                         break;
+                     case 3:
+                         queryAux +=">=\"";
+                         break;
+                     case 4:
+                         queryAux +=">\"";
+                         break;
+                     case 5:
+                         queryAux +=" LIKE \"";
+                         break;
                   }
-				  queryAux +=valores.get(i) + "\" AND ";
+                  queryAux +=valores.get(i) + "\" AND ";
                   i++;
               }
               if(queryAux.length() > 1){queryAux = queryAux.substring(0, queryAux.length()-5);}
