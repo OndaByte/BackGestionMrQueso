@@ -33,9 +33,9 @@ INSERT INTO Producto (nombre, precio_costo, precio_venta, stock_actual, stock_fr
 VALUES 
 ('Pizza Margherita', 3.50, 8.00, 50, 10, 'Harina, Agua, Tomate, Mozzarella, Albahaca'),
 ('Empanadas de Carne', 1.20, 3.00, 100, 20, 'Carne, Cebolla, Huevo, Aceituna, Masa'),
-('Hamburguesa Clásica', 2.00, 5.50, 70, 15, 'Carne de res, Lechuga, Tomate, Queso, Pan'),
-('Sushi Roll', 4.00, 12.00, 40, 5, 'Arroz, Alga nori, Salmón, Aguacate, Pepino'),
-('Lasaña de Carne', 3.80, 9.50, 30, 8, 'Pasta, Carne, Tomate, Mozzarella, Bechamel');
+('Hamburguesa Clasica', 2.00, 5.50, 70, 15, 'Carne de res, Lechuga, Tomate, Queso, Pan'),
+('Sushi Roll', 4.00, 12.00, 40, 5, 'Arroz, Alga nori, Salmin, Aguacate, Pepino'),
+('Lasania de Carne', 3.80, 9.50, 30, 8, 'Pasta, Carne, Tomate, Mozzarella, Bechamel');
 
 
 -- Inserciones en la tabla Caja

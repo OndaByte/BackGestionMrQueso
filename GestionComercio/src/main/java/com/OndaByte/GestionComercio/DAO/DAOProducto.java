@@ -21,11 +21,11 @@ public class DAOProducto extends ABMDAO<Producto>{
         if (aux != null){
             try {
 				aux.sumarStock(Integer.parseInt(cant));
+				this.modificar(aux);
+				return true;
 			} catch (Exception e) {
                 Log.log(e,DAOProducto.class);
 			}
-            this.modificar(aux);
-            return true;
         }
         return false;
     }
