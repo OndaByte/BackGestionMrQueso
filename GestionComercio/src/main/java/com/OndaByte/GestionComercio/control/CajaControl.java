@@ -38,7 +38,7 @@ public class CajaControl {
 				}
 				else{
 					dao.alta(new Caja(dinero_inicial));
-					ctx.status(208).result("Caja abierta con exito.\n");
+					ctx.status(201).result("Caja abierta con exito.\n");
 					return;
 				}
 			}
