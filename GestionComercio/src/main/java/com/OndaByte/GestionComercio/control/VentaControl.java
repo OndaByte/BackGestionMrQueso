@@ -12,7 +12,7 @@ import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.javalin.http.Context;
-
+import org.sql2o.Connection;
 
 
 /*
@@ -38,24 +38,24 @@ public class VentaControl {
 	//Venta
 	public static void nuevaVenta(Context ctx){	    	
 		Venta n;
-		try {
+		try(Connection con = DAOSql2o.getSql2o().beginTransaction()){
 			n = objectMapper.readValue(ctx.body(), Venta.class);
 			controlesVenta(n);
-			DAOCaja cajadao = new DAOCaja();
+			DAOCaja cajadao = new DAOCaja(con);
 			Caja actual = cajadao.getCaja();
 			n.setCaja(actual);
 			actual.sumarTotal(n.getTotal());
-			DAOVenta dao = new DAOVenta();
+			DAOVenta dao = new DAOVenta(con);
 			dao.alta(n);
-			DAOProducto proddao = new DAOProducto();
-			dao.altaProductosVenta(n);
+			DAOProducto proddao = new DAOProducto(con);
+			//	dao.altaProductosVenta(n);
 			//    printComanda(n);
 			ctx.status(201).result("Venta subida con exito");
+			con.commit();
 		} catch (Exception e) {
 			Log.log(e, VentaControl.class);
 			ctx.status(404).result("Error al subir la venta");
 		}
-		return;
 	}
 	    
 	public String getLines(String x){
@@ -175,13 +175,19 @@ public class VentaControl {
 	}
 
 	public static void controlStock(List<ItemVenta> prods) throws Exception {
-		Producto aux;
-		DAOProducto proddao = new DAOProducto();
-		for(ItemVenta p : prods){
-			aux = proddao.filtrar(p.getProducto_id()+"");
-			if(aux.getStock_actual() - p.getCantidad() < 0) {
-				throw new Exception("Se excedio el stock del producto '"+aux.getNombre()+"'.\n");
+		try(Connection con = DAOSql2o.getSql2o().beginTransaction()){
+			Producto aux;
+			DAOProducto proddao = new DAOProducto(con);
+			for(ItemVenta p : prods){
+				aux = proddao.filtrar(p.getProducto_id()+"");
+				if(aux.getStock_actual() - p.getCantidad() < 0) {
+					throw new Exception("Se excedio el stock del producto '"+aux.getNombre()+"'.\n");
+				}
 			}
+			con.commit();
+		}
+		catch (Exception e) {
+			Log.log(e, VentaControl.class);
 		}
 	}
 

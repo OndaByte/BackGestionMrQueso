@@ -13,6 +13,11 @@ import org.sql2o.Connection;
 
 public class DAOCaja extends ABMDAO<Caja> {
 
+	public DAOCaja(Connection con) {
+		super(con);
+	}
+
+
 	private String clave = "id";
 	
 	public Class<Caja> getClase() {

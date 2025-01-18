@@ -1,16 +1,16 @@
-
 package com.OndaByte.GestionComercio.DAO;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.sql2o.Connection;
 
 import com.OndaByte.GestionComercio.modelo.Usuario;
 
 public class DAOUsuario extends ABMDAO<Usuario>{
     private String clave = "id";
 
-    public DAOUsuario(){
-        super();
+    public DAOUsuario(Connection con){
+        super(con);
     }
 
     public Class<Usuario> getClase(){

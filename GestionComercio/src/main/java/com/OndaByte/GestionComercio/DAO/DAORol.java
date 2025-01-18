@@ -13,7 +13,12 @@ import com.OndaByte.GestionComercio.modelo.Rol;
  * DAORol
  */
 public class DAORol extends ABMDAO<Rol> {
-    private String clave = "id";
+    public DAORol(Connection con) {
+		super(con);
+		//TODO Auto-generated constructor stub
+	}
+
+	private String clave = "id";
 
 	@Override
 	public Class<Rol> getClase() {

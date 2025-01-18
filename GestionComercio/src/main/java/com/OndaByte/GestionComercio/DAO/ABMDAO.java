@@ -14,7 +14,9 @@ public abstract class ABMDAO <T> {
 
     // Campos es una lista de string de todos los campos de las clases definidas por nosotros (ondabyte) y que ademas esten en el paquete "modelo", esto se podria abstraer mas
     private List<Field> campos = new ArrayList<Field>();
+    private Connection con;
 
+    public ABMDAO(Connection con){this.con=con;setCampos();}
     /**
       * Este metodo debe ser definido por las clases especificas que hereden de ABMDAO, deberia devolver el tipo del objeto asociado a la entidad de la bd.
       * @return T
@@ -27,7 +29,6 @@ public abstract class ABMDAO <T> {
     abstract public String getClave();
 
 
-    public ABMDAO(){setCampos();}
 
     public String getTabla(){return this.getClase().getSimpleName();}
 
@@ -50,7 +51,7 @@ public abstract class ABMDAO <T> {
       * @return boolean - verdadero si el alta fue exitosa.
       */
      public boolean alta(T t) {
-         try(Connection con = DAOSql2o.getSql2o().beginTransaction()){
+         try{
              // Esto tendria que abstraerlo a un gestor de errores.
              if(t.getClass() != this.getClase()){
                  throw (new Exception("ERROR: el objeto pasado por parametro es del tipo incorrecto, el tipo de este DAO es: "+this.getClase().getName()));
@@ -69,7 +70,6 @@ public abstract class ABMDAO <T> {
              String query;
              query = "INSERT INTO " + this.getTabla() + columnas + " VALUES" + valores;
              con.createQuery(query).bind(t).executeUpdate();
-             con.commit();
 
              return true;
          }
@@ -88,8 +88,7 @@ public abstract class ABMDAO <T> {
       * @return boolean - verdadero si la modificacion fue exitosa.
       */
      public boolean modificar(T t) {
-         try(Connection con = DAOSql2o.getSql2o().beginTransaction()){
-
+         try{
              // Esto tendria que abstraerlo a un gestor de errores.
              if(t.getClass() != this.getClase()){
                  throw (new Exception("ERROR: el objeto pasado por parametro es del tipo incorrecto, el tipo de este DAO es: "+this.getClase().getName()));
@@ -104,7 +103,6 @@ public abstract class ABMDAO <T> {
                  set = set.substring(0,set.length()-2);
              query = "UPDATE " + this.getTabla() + " SET " + set + " WHERE "+this.getClave() + "=:"+this.getClave();
              con.createQuery(query).bind(t).executeUpdate();
-             con.commit();
              return true;
          }
          catch (Exception e){
@@ -121,7 +119,7 @@ public abstract class ABMDAO <T> {
       * @return boolean - verdadero si la baja fue exitosa, falso en caso contrario.
       */
      public boolean baja(String id, boolean borrar){
-         try(Connection con = DAOSql2o.getSql2o().open()){
+         try{
              String query;
              query = (borrar ? "DELETE FROM ": "UPDATE ") 
                  + this.getTabla() 
@@ -145,7 +143,6 @@ public abstract class ABMDAO <T> {
         try{
             Class c = this.getClase();
             String query = "SELECT * FROM "+ this.getTabla() +" WHERE estado=\"ACTIVO\"";
-            Connection con = DAOSql2o.getSql2o().open();
             return con.createQuery(query).executeAndFetch(c);
         }
         catch (Exception e){
@@ -170,7 +167,6 @@ public abstract class ABMDAO <T> {
             aux = aux.length() > 2 ? aux.substring(0,aux.length()-4) : aux;
 
             String query = "SELECT DISTINCT * FROM "+ this.getTabla() + " WHERE "+aux +" AND estado=\"ACTIVO\"";
-            Connection con = DAOSql2o.getSql2o().open();
             return con.createQuery(query).executeAndFetch(this.getClase());
         }
         catch(Exception e) {
@@ -189,7 +185,6 @@ public abstract class ABMDAO <T> {
       public T filtrar(String id){
           try {
               String query = "SELECT * FROM "+ this.getTabla() + " WHERE "+ this.getClave()+" = :"+this.getClave();
-              Connection con = DAOSql2o.getSql2o().open();
               return con.createQuery(query).addParameter(this.getClave(), id).executeAndFetchFirst(this.getClase());
           } catch (Exception e) {
               Log.log(e, ABMDAO.class);
@@ -244,9 +239,7 @@ public abstract class ABMDAO <T> {
               }
               if(queryAux.length() > 1){queryAux = queryAux.substring(0, queryAux.length()-5);}
               String query = "SELECT * FROM "+ this.getTabla() + " WHERE";
-              query+= queryAux; 
-
-              Connection con = DAOSql2o.getSql2o().open();
+              query+= queryAux;
               return con.createQuery(query).executeAndFetch(this.getClase());
           }
           catch (Exception e){
